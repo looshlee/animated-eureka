@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: checkout the repo
         run: |
-          echo ${{ toJson(github) }
+          echo ${{ toJson(github) }}
 
       - name: api call
         run: |
