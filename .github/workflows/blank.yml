@@ -7,14 +7,26 @@ name: CI
 on: [watch]
 
 jobs:
-  one:
+  checkout:
+    
     runs-on: macos-latest
+    
     steps:
-      - name: Dump GitHub event context
-        env:
-          SUPER_SECRET: $ {{secrets.GITHUB_TOKEN }}
-        run: |
-           curl  -X GET -H "Authorization: token $SUPER_SECRET"  -H "Accept: application/vnd.github.golden-comet-preview+json" https://api.github.com/users/looshlee
-#       - name: Did anything happen in previous step?
-#         run: | 
-#           echo curl https://api.github.com/users/looshlee
+      - uses: actions/checkout@v2
+      - name: checkout the repo
+
+  api-call:
+     runs-on: macos-latest
+    
+     steps:
+       - uses: actions/github-script@0.9.0
+       - name: github script 
+         with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.create({
+              issue_number: 1,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Issue from Actions'
+            })
