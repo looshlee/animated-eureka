@@ -36,3 +36,8 @@ jobs:
 
       - name: console log the date
         run: date
+        
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
