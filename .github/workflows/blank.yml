@@ -27,4 +27,5 @@ jobs:
         env:
          RUN_ID: ${{ toJson(github.run_id) }}
         run: |
-          curl -X GET -H "Authorization: token $GITHUB_TOKEN" -H "application/vnd.github.v3+json" https://api.github.com/repos/looshlee/animated-eureka/actions/runs/$RUN_ID
+          echo "$RUN_ID"
+          curl -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "application/vnd.github.v3+json" https://api.github.com/repos/looshlee/animated-eureka/actions/runs/{{$RUN_ID}}
