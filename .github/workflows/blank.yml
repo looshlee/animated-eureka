@@ -12,9 +12,9 @@ jobs:
     steps:
       - name: Dump GitHub event context
         env:
-          GITHUB_CONTEXT: ${{ toJson(github.event) }}
+          SUPER_SECRET: $ {{secrets.Actions_Test }}
         run: |
-          curl https://api.github.com/users/looshlee
-      - name: Did anything happen in previous step?
-        run: | 
-          echo curl https://api.github.com/users/looshlee
+           curl  -X GET -H "Authorization: token $SUPER_SECRET"  -H "Accept: application/vnd.github.golden-comet-preview+json" https://api.github.com/users/looshlee
+#       - name: Did anything happen in previous step?
+#         run: | 
+#           echo curl https://api.github.com/users/looshlee
