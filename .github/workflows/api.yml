@@ -7,7 +7,7 @@ name: API calls
 on: [watch]
 
 jobs:
-  Test Step:
+  Test:
    
      runs-on: macos-latest
      
