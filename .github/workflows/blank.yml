@@ -14,12 +14,17 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-      - name: checkout the repo
+      - name: Echo github context
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
 
-      - name: api call
+      - name: basic api call
         run: |
           curl  -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"  -H "Accept: application/vnd.github.golden-comet-preview+json" https://api.github.com/users/looshlee
-            
+          
+      - name: workflow api
+        env:
+         RUN_ID: ${{ toJson(github.run_id) }}
+        run: |
+          curl -X GET -H "Authorization: token $GITHUB_TOKEN" -H "application/vnd.github.v3+json" https://api.github.com/repos/looshlee/animated-eureka/actions/runs/$RUN_ID
