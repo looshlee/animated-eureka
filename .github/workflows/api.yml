@@ -1,49 +1,19 @@
-# This is a basic workflow to help you get started with Actions
-
-name: API calls
-
-# Controls when the action will run. Triggers the workflow on push or pull request 
-# events but only for the master branch
+name: test
 on: [watch]
-
 jobs:
-  Test:
-   
-     runs-on: macos-latest
-     
-     steps:
-       - run: date
-
-  Build:
-    
-    runs-on: macos-latest
-    
+  job1:
+    name: test access secret
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Echo github context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: basic api call
+      - name: get secret name
         run: |
-          curl  -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"  -H "Accept: application/vnd.github.golden-comet-preview+json" https://api.github.com/users/looshlee
-          
-      - name: workflow api
-        env:
-         RUN_ID: ${{ toJson(github.run_id) }}
-        run: |
-          echo "$RUN_ID"
-          curl -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "application/vnd.github.v3+json" https://api.github.com/repos/looshlee/animated-eureka/actions/runs/$RUN_ID
+          branch=${GITHUB_REF##*/}
+          echo "::set-env name=secret_name::${branch^^}"
 
-      - name: run a previous workflows api call
-        run: |
-         curl -X GET -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "application/vnd.github.v3+json" https://api.github.com/repos/looshlee/animated-eureka/actions/runs/63383594
+      - name: pass secret value
+        run: echo "::set-env name=secret_value::${{ secrets[env.secret_name] }}"
 
-      - name: console log the date
-        run: date
-        
-      - name: Dump steps context
-        env:
-          STEPS_CONTEXT: ${{ toJson(steps) }}
-        run: echo "$STEPS_CONTEXT"
+      - name: access secret
+        run: |
+          echo "secrets.$secret_name = ${{ secrets[env.secret_name] }}"
+          echo "secrets.$secret_name = $secret_value"
