@@ -5,15 +5,6 @@ jobs:
     name: test access secret
     runs-on: ubuntu-latest
     steps:
-      - name: get secret name
-        run: |
-          branch=${GITHUB_REF##*/}
-          echo "::set-env name=secret_name::${branch^^}"
-
-      - name: pass secret value
-        run: echo "::set-env name=secret_value::${{ secrets[env.secret_name] }}"
-
-      - name: access secret
-        run: |
-          echo "secrets.$secret_name = ${{ secrets[env.secret_name] }}"
-          echo "secrets.$secret_name = $secret_value"
+      - run: echo $SECRET | rev
+        env:
+          SECRET: ${{ secrets[env.SECRET_NAME] }}
